@@ -1,0 +1,94 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+<div id="content-main">
+    <form action="{% url 'simple_buy:orders' %}" method="POST" name="buy">
+        {% csrf_token %}
+        <div class="actions">
+            <span class="form-group col-md-2">
+                {{ order_form.product_id }}
+            </span>
+            <span class="form-group col-md-2">
+                {{ order_form.qty }}
+            </span>
+            <input class="btn btn-success" type="submit" value="Submit" />
+            <span class="form-group col-md-4">
+                {{ customer_form.customer_id }}
+                {{ customer_form.vip }} 是否為VIP身份
+            </span>
+        </div>
+    </form>
+    <div class="results">
+        <h1>商品列表</h1>
+        <table>
+            <colgroup span="6"></colgroup>
+            <tr>
+                <th>Product ID</th>
+                <th>stock_pcs</th>
+                <th>price</th>
+                <th>shop_id</th>
+                <th>vip</th>
+            </tr>
+
+            {% for product in products %}
+            <tr>
+                <td>{{ product.product_id }}</td>
+                <td>{{ product.stock_pcs }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.shop_id }}</td>
+                <td>
+                    {% if product.vip_only %}
+                         <input name="vip" type="checkbox" disabled="disabled" checked="checked"/>
+                    {% else %}
+                         <input name="vip" type="checkbox" disabled="disabled"/>
+                    {% endif %}
+
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h1>訂單記錄</h1>
+        <table>
+            <colgroup span="6"></colgroup>
+            <tr>
+                <th>Order ID</th>
+                <th>product_id</th>
+                <th>qty</th>
+                <th>price</th>
+                <th>shop_id</th>
+                <th>Customer ID</th>
+                <th>Delete</th>
+            </tr>
+
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.product_id }}</td>
+                <td>{{ order.qty }}</td>
+                <td>{{ order.product.price }}</td>
+                <td>{{ order.product.shop_id }}</td>
+                <td>{{ order.customer_id }}</td>
+                <td>
+                    <form action="{% url 'simple_buy:delete_order' order_id=order.id %}" method="post" name="order-{{ order.id }}">
+                        {% csrf_token %}
+                        <input class="btn btn-success" type="submit" value="刪除" />
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="content" id="top3-products">
+        <a class="button" href="{% url 'simple_buy:products'%}?limit=3">
+            Top3
+        </a>
+        <div class="results">
+            <h1>{{ title }}</h1>
+            {{ top3_product_table }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

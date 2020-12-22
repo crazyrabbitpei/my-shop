@@ -1,0 +1,9 @@
+{% extends "registration/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Urmart demo') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'simple_buy:index' %}">{{ site_header|default:_('Urmart demo') }}</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
