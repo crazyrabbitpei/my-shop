@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, reverse
+from django.shortcuts import redirect
 from django.views.generic import RedirectView
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(url=reverse('simple_buy:index'))),
+    #path('', RedirectView.as_view(url='/simple_buy/')),
     path('simple_buy/', include('simple_buy.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]
