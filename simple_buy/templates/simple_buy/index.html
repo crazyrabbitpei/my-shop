@@ -19,9 +19,12 @@
         </div>
     </form>
     <div class="results">
-        <h1>商品列表</h1>
         <table>
-            <colgroup span="6"></colgroup>
+            <thead>
+                <tr>
+                    <th>商品列表</th>
+                </tr>
+            </thead>
             <tr>
                 <th>Product ID</th>
                 <th>stock_pcs</th>
@@ -48,9 +51,12 @@
             {% endfor %}
         </table>
 
-        <h1>訂單記錄</h1>
         <table>
-            <colgroup span="6"></colgroup>
+            <thead>
+                <tr>
+                    <th>訂單記錄</th>
+                </tr>
+            </thead>
             <tr>
                 <th>Order ID</th>
                 <th>product_id</th>
@@ -81,13 +87,9 @@
     </div>
 
     <div class="content" id="top3-products">
-        <a class="button" href="{% url 'simple_buy:products'%}?limit=3">
+        <button class="button" href="{% url 'simple_buy:products'%}?type=top3">
             Top3
-        </a>
-        <div class="results">
-            <h1>{{ title }}</h1>
-            {{ top3_product_table }}
-        </div>
+        </button>
     </div>
 </div>
 
