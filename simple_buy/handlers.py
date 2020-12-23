@@ -58,18 +58,6 @@ def get_products_handler(order, limit, order_by):
 
 
 def get_shop_handler(detail_type, order, limit, order_by):
-    def show_sales_detail():
-        with connection.cursor() as cursor:
-            cursor.execute(
-                'select p.shop_id, sum(qty*price) as total_amount, Sum(qty) as total_qty, Count(shop_id) as total_order '
-                'from simple_buy_order o inner join simple_buy_product p on o.product_id = p.product_id '
-                'group by p.shop_id;')
-            columns = [col[0] for col in cursor.description]
-            return [
-                dict(zip(columns, row))
-                for row in cursor.fetchall()
-            ]
-
     handler = {
         'sales': show_sales_detail
     }.get(detail_type, None)
@@ -84,3 +72,16 @@ def get_shop_handler(detail_type, order, limit, order_by):
         return JsonResponse(result, status=200, safe=False)
 
     return JsonResponse(result[:limit], status=200, safe=False)
+
+
+def show_sales_detail():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'select p.shop_id, sum(qty*price) as total_amount, Sum(qty) as total_qty, Count(shop_id) as total_order '
+            'from simple_buy_order o inner join simple_buy_product p on o.product_id = p.product_id '
+            'group by p.shop_id;')
+        columns = [col[0] for col in cursor.description]
+        return [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]

@@ -1,11 +1,11 @@
 import json
 from datetime import date, timedelta
-from .handlers import get_shop_handler
+from .handlers import show_sales_detail
 
 
 def my_scheduled_job(to_dir):
-    data = get_shop_handler('sales', order='asc', order_by='total_amount', limit=-1)
+    data = show_sales_detail()
     print(data)
     d = date.today() - timedelta(days=1)
-    with open(f'{to_dir}/{d.isoformat()}', 'w') as fp:
+    with open(f'{to_dir}/{d.isoformat()}.json', 'w') as fp:
         json.dump(fp, data)
