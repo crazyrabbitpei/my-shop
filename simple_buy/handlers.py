@@ -80,4 +80,7 @@ def get_shop_handler(detail_type, order, limit, order_by):
     o = False if order == 'asc' else True
     result.sort(reverse=o, key=lambda l: l[order_by] if order_by in l else l['total_amount'])
 
+    if limit == -1:
+        return JsonResponse(result, status=200, safe=False)
+
     return JsonResponse(result[:limit], status=200, safe=False)
