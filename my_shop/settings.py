@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
     'simple_buy.apps.SimpleBuyConfig'
 ]
 
@@ -104,6 +105,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+CRONJOBS = [
+    ('01 00 * * *', 'simple_buy.cron.my_scheduled_job', '>> test.log 2>&1'),
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
