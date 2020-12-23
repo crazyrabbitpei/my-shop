@@ -106,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CRONJOBS = [
-    ('01 00 * * *', 'simple_buy.cron.my_scheduled_job', os.path.join(BASE_DIR, 'reports'), '>> cron.log 2>&1'),
+    ('01 00 * * *', 'simple_buy.cron.my_scheduled_job', [os.path.join(BASE_DIR, 'reports')], '>> cron.log 2>&1'),
 ]
 
 # Internationalization
