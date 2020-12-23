@@ -84,6 +84,17 @@ def check_stock_pcs(func):
     return wrap
 
 
+def check_quantity(func):
+    def wrap(*args, **kwargs):
+        request = args[0]
+        qty = kwargs['qty']
+        if qty <= 0:
+            render_index_page(request, 'error', _('Quantity must be greater than 0.'))
+            return redirect(reverse('simple_buy:index'))
+        return func(*args, **kwargs)
+    return wrap
+
+
 def check_restock(func):
     def wrap(*args, **kwargs):
         request = args[0]

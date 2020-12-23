@@ -6,7 +6,7 @@ from django.db.models import Sum
 from django.db import connection, IntegrityError
 from .render_page import render_index_page
 from .models import Product, Order
-from .checks import check_product_exist, check_vip, check_stock_pcs, check_if_create_customer
+from .checks import check_product_exist, check_vip, check_stock_pcs, check_quantity, check_if_create_customer
 
 
 def get_orders_handler(order, limit, order_by):
@@ -20,12 +20,10 @@ def get_orders_handler(order, limit, order_by):
 @check_product_exist
 @check_vip
 @check_stock_pcs
+@check_quantity
 @check_if_create_customer
 def post_order_handler(*args, product, customer, qty):
     request = args[0]
-    if qty <= 0:
-        render_index_page(request, 'error', _('Quantity must be greater than 0.'))
-        return redirect(reverse('simple_buy:index'))
     try:
         Order.objects.create(product=product, customer=customer, qty=qty)
     except (ValidationError, IntegrityError) as e:
