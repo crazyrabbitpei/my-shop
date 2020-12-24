@@ -7,14 +7,28 @@ from .render_page import render_index_page
 from .checks import check_get_range_parameter, check_restock
 from .handlers import get_orders_handler, post_order_handler, delete_order_handler, \
     get_products_handler, get_shop_handler
+import os
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
+
+
 # Create your views here.
+def record_meta(func):
+    def wrap(*args, **kwargs):
+        request = kwargs['request']
+        logger.info(f"{request.headers}, {request.META['REMOTE_ADDR']}, {request.META['REMOTE_HOST']}")
+        return func(*args, **kwargs)
+    return wrap
 
 
+@record_meta
 @login_required
 def index(request):
     return render(request, 'simple_buy/index.html', render_index_page())
 
 
+@record_meta
 @login_required
 @require_http_methods(['GET', 'POST'])
 @check_get_range_parameter
@@ -30,6 +44,7 @@ def orders(request, order, limit, order_by=None):
     return handler(request)
 
 
+@record_meta
 @login_required
 @require_http_methods(['DELETE', 'POST'])
 @check_restock
@@ -42,6 +57,7 @@ def delete_order(request, order, order_id):
     return handler(request, order)
 
 
+@record_meta
 @login_required
 @require_http_methods(['GET'])
 @check_get_range_parameter
@@ -57,6 +73,7 @@ def products(request, order, limit, order_by=None):
     return handler(order, limit, order_by)
 
 
+@record_meta
 @login_required
 @require_http_methods(['GET'])
 @check_get_range_parameter
